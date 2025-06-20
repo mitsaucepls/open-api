@@ -255,6 +255,23 @@ class OpenApiHttpFuturePrivate {
         $response = $this->sendRequest('GET', $url, $params);
         return $this->handleResponse($response);
     }
+
+    /**
+     * get current positions
+     * 
+     * @param string|null $symbol symbol, null for all symbols
+     * @return array current positions
+     */
+    public function getCurrentPositions(?string $symbol = null): array {
+        $url = "/api/v1/futures/position/get_pending_positions";
+        $params = [];
+        if ($symbol) {
+            $params["symbol"] = $symbol;
+        }
+        
+        $response = $this->sendRequest('GET', $url, $params);
+        return $this->handleResponse($response);
+    }
 }
 
 // example usage
@@ -269,6 +286,10 @@ if (php_sapi_name() === 'cli') {
         // get account info
         $account = $client->getAccount();
         echo "Account info: " . json_encode($account, JSON_PRETTY_PRINT) . "\n";
+        
+        // get current positions
+        $currentPositions = $client->getCurrentPositions("BTCUSDT");
+        echo "Current positions: " . json_encode($currentPositions, JSON_PRETTY_PRINT) . "\n";
         
         // get history positions
         $historyPositions = $client->getHistoryPositions("BTCUSDT");
