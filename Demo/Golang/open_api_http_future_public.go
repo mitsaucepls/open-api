@@ -258,6 +258,38 @@ func (c *OpenApiHttpFuturePublic) GetTradingPairs() ([]interface{}, error) {
 	return result, nil
 }
 
+// GetBatchFundingRate get batch funding rate
+// Rate Limit: 10 req/sec/ip
+func (c *OpenApiHttpFuturePublic) GetBatchFundingRate() ([]interface{}, error) {
+	params := make(map[string]string)
+
+	queryString := BuildQueryString(params)
+	req, err := http.NewRequest("GET", c.baseURL+"/api/v1/futures/market/funding_rate/batch"+queryString, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	data, err := c.handleResponse(resp)
+	if err != nil {
+		return nil, err
+	}
+
+	result, ok := data.([]interface{})
+	if !ok {
+		return nil, fmt.Errorf("unexpected response type: %T", data)
+	}
+
+	return result, nil
+}
+
 // HttpPublicExampleUsage example usage
 func HttpPublicExampleUsage() {
 	// load config
@@ -289,7 +321,7 @@ func HttpPublicExampleUsage() {
 	// get kline data
 	currentTime := time.Now().UnixMilli()
 	oneHourAgo := currentTime - (60 * 60 * 1000)
-	klines, err := client.GetKline("BTCUSDT", "1m", 5, &oneHourAgo, &currentTime, "")
+	klines, err := client.GetKline("BTCUSDT", "1m", 5, &oneHourAgo, &currentTime, "LAST_PRICE")
 	if err != nil {
 		fmt.Printf("get kline data failed: %v\n", err)
 		return
@@ -303,6 +335,14 @@ func HttpPublicExampleUsage() {
 		return
 	}
 	fmt.Printf("funding rate: %+v\n", fundingRate)
+
+	// get batch funding rate
+	fundingRates, err := client.GetBatchFundingRate()
+	if err != nil {
+		fmt.Printf("get batch funding rate failed: %v\n", err)
+		return
+	}
+	fmt.Printf("funding rates: %+v\n", fundingRates)
 
 	// get trading pair info
 	tradingPairs, err := client.GetTradingPairs()

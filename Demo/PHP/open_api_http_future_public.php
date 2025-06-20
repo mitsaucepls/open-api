@@ -168,6 +168,14 @@ class OpenApiHttpFuturePublic {
         
         return $this->sendRequest('GET', '/api/v1/futures/market/kline', $params);
     }
+
+    /**
+     * get batch funding rate
+     */
+    public function getBatchFundingRate(): array {
+        $params = [];
+        return $this->sendRequest('GET', '/api/v1/futures/market/funding_rate/batch', $params);
+    }
 }
 
 // example usage
@@ -199,6 +207,10 @@ function main() {
             "LAST_PRICE"
         );
         error_log("Klines data: " . json_encode($klines));
+        
+        // get batch funding rate
+        $fundingRates = $client->getBatchFundingRate();
+        error_log("Funding rates data: " . json_encode($fundingRates));
         
     } catch (Exception $e) {
         error_log("Error in main: " . $e->getMessage());

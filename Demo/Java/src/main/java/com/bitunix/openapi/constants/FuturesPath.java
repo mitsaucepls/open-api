@@ -10,6 +10,7 @@ public interface FuturesPath {
     String GET_KLINE = "/api/v1/futures/market/kline";
     String GET_FUNDING_RATE = "/api/v1/futures/market/funding_rate";
     String GET_DEPTH = "/api/v1/futures/market/depth";
+    String GET_BATCH_FUNDING_RATE = "/api/v1/futures/market/funding_rate/batch";
 
     String GET_ACCOUNT = "/api/v1/futures/account";
     String GET_LEVERAGE_AND_MARGIN_MODE = "/api/v1/futures/account/get_leverage_margin_mode";

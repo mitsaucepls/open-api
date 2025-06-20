@@ -125,6 +125,19 @@ class OpenApiHttpFuturePublic:
         response = self.session.get(url, params=params, headers=headers)
         return self._handle_response(response)
 
+    def get_batch_funding_rate(self, symbols: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Get batch funding rate
+        """
+        url = f"{self.base_url}/api/v1/futures/market/funding_rate/batch"
+        params = {}
+        
+        query_string = sort_params(params)
+        headers = get_auth_headers(self.config.api_key, self.config.secret_key, query_string)
+        
+        response = self.session.get(url, params=params, headers=headers)
+        return self._handle_response(response)
+
 async def main():
     """Main function example"""
     # Load configuration
@@ -147,6 +160,10 @@ async def main():
         one_hour_ago = current_time - (60 * 60 * 1000)  # One hour ago timestamp
         klines = client.get_kline("BTCUSDT", "1m", 5, start_time=one_hour_ago, end_time=current_time, type="LAST_PRICE")
         logging.info(f"Klines data: {klines}")
+        
+        # Get batch funding rate
+        funding_rates = client.get_batch_funding_rate("BTCUSDT,ETHUSDT")
+        logging.info(f"Funding rates data: {funding_rates}")
         
     except Exception as e:
         logging.error(f"Error in main: {e}")

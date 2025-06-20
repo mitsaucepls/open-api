@@ -101,5 +101,19 @@ public class FuturesPublicApiClient {
         return httpUtils.getForObject(builder.build(), Headers.of(), Depth.class);
     }
 
+    /**
+     * get batch funding rate
+     *
+     * @return funding rate list
+     */
+    public ArrayList<BatchFundingRate> getBatchFundingRate() {
+        HttpUrl.Builder builder = new HttpUrl.Builder()
+                .scheme(ServerConfig.HTTPS_SCHEMA)
+                .host(ServerConfig.HOST)
+                .port(ServerConfig.port)
+                .addPathSegment(FuturesPath.GET_BATCH_FUNDING_RATE);
+
+        return httpUtils.getForList(builder.build(), Headers.of(), BatchFundingRate.class);
+    }
 
 }
