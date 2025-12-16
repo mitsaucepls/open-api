@@ -1,4 +1,4 @@
-module github.com/BitunixOfficial/open-api/demo
+module github.com/mitsaucepls/open-api/demo/golang
 
 go 1.21.2
 
